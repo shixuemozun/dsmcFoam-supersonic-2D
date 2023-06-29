@@ -1,0 +1,147 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     dsmcFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         1;
+
+deltaT          1e-5;
+
+writeControl    runTime;
+
+writeInterval   0.001;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  12	;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   12;
+
+runTimeModifiable true;
+
+adjustTimeStep  no;
+
+functions
+{
+    fieldAverage1
+    {
+        type            fieldAverage;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    writeTime;
+
+        fields
+        (
+            rhoN
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            rhoM
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            dsmcRhoN
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            momentum
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            linearKE
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            internalE
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            iDof
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            q
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+            fD
+            {
+                mean        on;
+                prime2Mean  off;
+                base        time;
+windows 2;
+            }
+
+        );
+    }
+
+    dsmcFields1
+    {
+        type            dsmcFields;
+        libs            ("liblagrangianFunctionObjects.so");
+        writeControl    writeTime;
+    }
+
+    forces1
+    {
+        type            forces;
+        libs            ("libforces.so");
+        writeControl    writeTime;
+        patches         (WALL);
+        directForceDensity true;
+        fDName          fDMean;
+        CofR            (0 0 0);
+        log             on;
+    }
+}
+
+// ************************************************************************* //
